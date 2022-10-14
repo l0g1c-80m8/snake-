@@ -1,4 +1,4 @@
-# CPPND: Capstone Snake Game Example
+# Snake++ Game
 
 The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
 
