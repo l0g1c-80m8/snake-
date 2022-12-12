@@ -1,1 +1,7 @@
 .github/**
+
+cmake-build-debug/
+
+.idea/
+
+build/
