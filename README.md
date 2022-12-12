@@ -21,6 +21,11 @@ The code for this repo was inspired by [this](https://codereview.stackexchange.c
 
 ## Basic Build Instructions
 
+1. Execute the build script with `./build.sh` to build the project.
+2. To run execute the `./run.sh` script. The run script can be executed without the build script as well. 
+
+#### Alternatively, follow the below procedure:
+
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
