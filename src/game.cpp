@@ -119,12 +119,8 @@ std::set<SDL_Point> Game::GenerateGridPoints(int num) {
           promise.set_value(GenerateGridPoint());
       }, std::move(promise));
     }
-    for (auto & i : thread_pool) {
-      i.join();
-    }
-    for (auto & future_point : future_points) {
-      pts.insert(future_point.get());
-    }
+    for (auto & i : thread_pool) i.join();
+    for (auto & future_point : future_points) pts.insert(future_point.get());
   }
   return pts;
 }
