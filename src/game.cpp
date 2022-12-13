@@ -1,3 +1,5 @@
+#include <thread>
+#include <future>
 #include "game.h"
 #include "SDL.h"
 
@@ -107,7 +109,22 @@ int Game::GetSize() const { return snake -> size; }
 std::set<SDL_Point> Game::GenerateGridPoints(int num) {
   std::set<SDL_Point> pts{};
   while (pts.size() < num) {
-    pts.insert(GenerateGridPoint());
+    std::vector<std::future<SDL_Point>> future_points;
+    std::vector<std::thread> thread_pool;
+    for (int i = 0; i < num - pts.size(); i++) {
+      std::promise<SDL_Point> promise;
+      future_points.push_back(promise.get_future());
+      pts.insert(GenerateGridPoint());
+      thread_pool.emplace_back([this](std::promise<SDL_Point> promise) {
+          promise.set_value(GenerateGridPoint());
+      }, std::move(promise));
+    }
+    for (auto & i : thread_pool) {
+      i.join();
+    }
+    for (auto & future_point : future_points) {
+      pts.insert(future_point.get());
+    }
   }
   return pts;
 }
