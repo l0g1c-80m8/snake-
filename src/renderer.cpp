@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include "resources.h"
 #include <iostream>
+#include <memory>
 #include <string>
 
 Renderer::Renderer(const std::size_t screen_width,
@@ -10,6 +11,91 @@ Renderer::Renderer(const std::size_t screen_width,
       screen_height(screen_height),
       grid_width(grid_width),
       grid_height(grid_height) {
+  sdl_resources = std::make_unique<Renderer::SDL_Resources>(screen_width, screen_height, grid_width, grid_height);
+}
+
+Renderer::~Renderer() = default;
+
+void Renderer::Render(
+    std::shared_ptr<Snake> const& snake,
+    std::set<SDL_Point> const &obstacles,
+    std::set<SDL_Point> const &slowdowns,
+    std::set<SDL_Point> const &speedups,
+    std::set<SDL_Point> const &food_points
+    ) const {
+  SDL_Rect block;
+  block.w = (int) (screen_width / grid_width);
+  block.h = (int) (screen_height / grid_height);
+
+  // Clear screen
+  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_RenderClear(sdl_resources->getSDL_Renderer());
+
+  // Render obstacles
+  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x80, 0x00, 0x00, 0xFF);
+  for (SDL_Point const &point : obstacles) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getObstacleTexture(), nullptr, &block);
+  }
+
+  // Render slowdowns
+  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x32, 0xCD, 0x32, 0xFF);
+  for (SDL_Point const &point : slowdowns) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getSlowdownTexture(), nullptr, &block);
+  }
+
+  // Render speedups
+  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0x8C, 0x00, 0xFF);
+  for (SDL_Point const &point : speedups) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getSpeedupTexture(), nullptr, &block);
+  }
+
+  // Render food
+  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0xCC, 0x00, 0xFF);
+  for (SDL_Point const &point : food_points) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getFoodTexture(), nullptr, &block);
+  }
+
+  // Render snake's body
+  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+  for (SDL_Point const &point : snake -> body) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderFillRect(sdl_resources->getSDL_Renderer(), &block);
+  }
+
+  // Render snake's head
+  block.x = static_cast<int>(snake -> head_x) * block.w;
+  block.y = static_cast<int>(snake -> head_y) * block.h;
+  if (snake -> alive) {
+    SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x00, 0x7A, 0xCC, 0xFF);
+  } else {
+    SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0x00, 0x00, 0xFF);
+  }
+  SDL_RenderFillRect(sdl_resources->getSDL_Renderer(), &block);
+
+  // Update Screen
+  SDL_RenderPresent(sdl_resources->getSDL_Renderer());
+}
+
+void Renderer::UpdateWindowTitle(int score, int fps) {
+  std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
+  SDL_SetWindowTitle(sdl_resources->getSDL_Window(), title.c_str());
+}
+
+Renderer::SDL_Resources::SDL_Resources(
+    const std::size_t screen_width,
+    const std::size_t screen_height,
+    const std::size_t grid_width,
+    const std::size_t grid_height
+    ) {
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
@@ -17,10 +103,13 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 
   // Create Window
-  sdl_window = SDL_CreateWindow("Snake Game", SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED, (int) screen_width,
-                                (int) screen_height, SDL_WINDOW_SHOWN);
-
+  sdl_window = SDL_CreateWindow(
+      "Snake Game", SDL_WINDOWPOS_CENTERED,
+      SDL_WINDOWPOS_CENTERED,
+      (int) screen_width,
+      (int) screen_height,
+      SDL_WINDOW_SHOWN
+      );
   if (nullptr == sdl_window) {
     std::cerr << "Window could not be created.\n";
     std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
@@ -58,9 +147,10 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Food item could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
 }
 
-Renderer::~Renderer() {
+Renderer::SDL_Resources::~SDL_Resources() {
   SDL_DestroyWindow(sdl_window);
   SDL_DestroyTexture(obstacle_texture);
   SDL_DestroyTexture(speedups_texture);
@@ -69,76 +159,9 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(
-    std::shared_ptr<Snake> const& snake,
-    std::set<SDL_Point> const &obstacles,
-    std::set<SDL_Point> const &slowdowns,
-    std::set<SDL_Point> const &speedups,
-    std::set<SDL_Point> const &food_points
-    ) {
-  SDL_Rect block;
-  block.w = (int) (screen_width / grid_width);
-  block.h = (int) (screen_height / grid_height);
-
-  // Clear screen
-  SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
-  SDL_RenderClear(sdl_renderer);
-
-  // Render obstacles
-  SDL_SetRenderDrawColor(sdl_renderer, 0x80, 0x00, 0x00, 0xFF);
-  for (SDL_Point const &point : obstacles) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_renderer, obstacle_texture, nullptr, &block);
-  }
-
-  // Render slowdowns
-  SDL_SetRenderDrawColor(sdl_renderer, 0x32, 0xCD, 0x32, 0xFF);
-  for (SDL_Point const &point : slowdowns) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_renderer, slowdowns_texture, nullptr, &block);
-  }
-
-  // Render speedups
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x8C, 0x00, 0xFF);
-  for (SDL_Point const &point : speedups) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_renderer, speedups_texture, nullptr, &block);
-  }
-
-  // Render food
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
-  for (SDL_Point const &point : food_points) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_renderer, food_texture, nullptr, &block);
-  }
-
-  // Render snake's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-  for (SDL_Point const &point : snake -> body) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
-  }
-
-  // Render snake's head
-  block.x = static_cast<int>(snake -> head_x) * block.w;
-  block.y = static_cast<int>(snake -> head_y) * block.h;
-  if (snake -> alive) {
-    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-  } else {
-    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
-  }
-  SDL_RenderFillRect(sdl_renderer, &block);
-
-  // Update Screen
-  SDL_RenderPresent(sdl_renderer);
-}
-
-void Renderer::UpdateWindowTitle(int score, int fps) {
-  std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
-  SDL_SetWindowTitle(sdl_window, title.c_str());
-}
+SDL_Window* Renderer::SDL_Resources::getSDL_Window() { return sdl_window; }
+SDL_Renderer* Renderer::SDL_Resources::getSDL_Renderer() { return sdl_renderer; }
+SDL_Texture* Renderer::SDL_Resources::getObstacleTexture() { return obstacle_texture; }
+SDL_Texture* Renderer::SDL_Resources::getSlowdownTexture() { return slowdowns_texture; }
+SDL_Texture* Renderer::SDL_Resources::getSpeedupTexture() { return speedups_texture; }
+SDL_Texture* Renderer::SDL_Resources::getFoodTexture() { return food_texture; }
