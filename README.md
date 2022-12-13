@@ -4,7 +4,7 @@ The code for this repo was inspired by [this](https://codereview.stackexchange.c
 
 ![snake game demo run](assets/snake_game.png)
 
-![Watch the video](https://youtu.be/CQpWfHMSWvs)
+[Watch the video](https://youtu.be/CQpWfHMSWvs)
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
