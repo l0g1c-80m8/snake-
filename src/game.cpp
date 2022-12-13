@@ -95,15 +95,19 @@ void Game::Update() {
   } else if (obstacles.find(SDL_Point{new_x, new_y}) != obstacles.end()) {
     snake -> alive = false;
   } else if (slowdowns.find(SDL_Point{new_x, new_y}) != slowdowns.end()) {
+    slow_downs++;
     PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giSlowdown);
     snake -> speed -= 0.02;
   } else if (speedups.find(SDL_Point{new_x, new_y}) != speedups.end()) {
+    speed_ups++;
     PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giSpeedup);
     snake -> speed += 0.02;
   }
 }
 
 int Game::GetScore() const { return score; }
+int Game::GetSlowdowns() const { return slow_downs; }
+int Game::GetSpeedups() const { return speed_ups; }
 int Game::GetSize() const { return snake -> size; }
 
 std::set<SDL_Point> Game::GenerateGridPoints(int num) {
