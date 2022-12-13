@@ -1,5 +1,6 @@
 #include "snake.h"
 #include <cmath>
+#include <memory>
 
 void Snake::Update() {
   SDL_Point prev_cell{
@@ -74,4 +75,11 @@ bool Snake::SnakeCell(int x, int y) {
           [x, y](auto const &item){
               return (x == item.x && y == item.y);
           });
+}
+
+std::shared_ptr<Snake> Snake::Instance(int grid_width, int grid_height) {
+    if (!_instance) {
+        _instance.reset(new Snake(grid_width, grid_height));
+    }
+    return _instance;
 }

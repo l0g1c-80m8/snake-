@@ -5,11 +5,10 @@
 
 class Controller {
  public:
-  static void HandleInput(bool &running, Snake &snake) ;
+  static void HandleInput(bool &running, std::shared_ptr<Snake> &snake) ;
 
  private:
-  static void ChangeDirection(Snake &snake, Snake::Direction input,
-                       Snake::Direction opposite) ;
+  static void ChangeDirection(std::shared_ptr<Snake> &snake, Snake::Direction input, Snake::Direction opposite);
 };
 
 #endif
