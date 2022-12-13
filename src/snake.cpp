@@ -68,10 +68,10 @@ bool Snake::SnakeCell(int x, int y) {
   if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) {
     return true;
   }
-  for (auto const &item : body) {
-    if (x == item.x && y == item.y) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(
+          body.begin(),
+          body.end(),
+          [x, y](auto const &item){
+              return (x == item.x && y == item.y);
+          });
 }
