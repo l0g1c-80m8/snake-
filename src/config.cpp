@@ -25,27 +25,27 @@ Config::Config() {
 std::tuple<int, int, int> Config::ReadConfig() {
     std::ifstream in_stream(Config::config_file_name);
     std::string line, value;
-    int l1 = 0;
-    int l2 = 0;
-    int l3 = 0;
+    int conf1 = 0;
+    int conf2 = 0;
+    int conf3 = 0;
     if (in_stream.is_open()) {
         if (std::getline(in_stream, line)) {
             std::istringstream basicInputStringStream(line);
             basicInputStringStream >> value;
-            l1 = stoi(value);
+            conf1 = stoi(value);
         }
         if (std::getline(in_stream, line)) {
             std::istringstream basicInputStringStream(line);
             basicInputStringStream >> value;
-            l2 = stoi(value);
+            conf2 = stoi(value);
         }
         if (std::getline(in_stream, line)) {
             std::istringstream basicInputStringStream(line);
             basicInputStringStream >> value;
-            l3 = stoi(value);
+            conf3 = stoi(value);
         }
     }
-    return {l1, l2, l3};
+    return {conf1, conf2, conf3};
 }
 
 int Config::getObstacles() const { return _obstacles; }
