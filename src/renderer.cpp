@@ -28,66 +28,66 @@ void Renderer::Render(
   block.h = (int) (screen_height / grid_height);
 
   // Clear screen
-  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x1E, 0x1E, 0x1E, 0xFF);
-  SDL_RenderClear(sdl_resources->getSDL_Renderer());
+  SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_RenderClear(sdl_resources->GetSDL_Renderer());
 
   // Render obstacles
-  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x80, 0x00, 0x00, 0xFF);
+  SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0x80, 0x00, 0x00, 0xFF);
   for (SDL_Point const &point : obstacles) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getObstacleTexture(), nullptr, &block);
+    SDL_RenderCopy(sdl_resources->GetSDL_Renderer(), sdl_resources->GetObstacleTexture(), nullptr, &block);
   }
 
   // Render slowdowns
-  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x32, 0xCD, 0x32, 0xFF);
+  SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0x32, 0xCD, 0x32, 0xFF);
   for (SDL_Point const &point : slowdowns) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getSlowdownTexture(), nullptr, &block);
+    SDL_RenderCopy(sdl_resources->GetSDL_Renderer(), sdl_resources->GetSlowdownTexture(), nullptr, &block);
   }
 
   // Render speedups
-  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0x8C, 0x00, 0xFF);
+  SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0xFF, 0x8C, 0x00, 0xFF);
   for (SDL_Point const &point : speedups) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getSpeedupTexture(), nullptr, &block);
+    SDL_RenderCopy(sdl_resources->GetSDL_Renderer(), sdl_resources->GetSpeedupTexture(), nullptr, &block);
   }
 
   // Render food
-  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0xCC, 0x00, 0xFF);
+  SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0xFF, 0xCC, 0x00, 0xFF);
   for (SDL_Point const &point : food_points) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderCopy(sdl_resources->getSDL_Renderer(), sdl_resources->getFoodTexture(), nullptr, &block);
+    SDL_RenderCopy(sdl_resources->GetSDL_Renderer(), sdl_resources->GetFoodTexture(), nullptr, &block);
   }
 
   // Render snake's body
-  SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0xFF, 0xFF, 0xFF, 0xFF);
   for (SDL_Point const &point : snake -> body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_resources->getSDL_Renderer(), &block);
+    SDL_RenderFillRect(sdl_resources->GetSDL_Renderer(), &block);
   }
 
   // Render snake's head
   block.x = static_cast<int>(snake -> head_x) * block.w;
   block.y = static_cast<int>(snake -> head_y) * block.h;
   if (snake -> alive) {
-    SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0x00, 0x7A, 0xCC, 0xFF);
+    SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0x00, 0x7A, 0xCC, 0xFF);
   } else {
-    SDL_SetRenderDrawColor(sdl_resources->getSDL_Renderer(), 0xFF, 0x00, 0x00, 0xFF);
+    SDL_SetRenderDrawColor(sdl_resources->GetSDL_Renderer(), 0xFF, 0x00, 0x00, 0xFF);
   }
-  SDL_RenderFillRect(sdl_resources->getSDL_Renderer(), &block);
+  SDL_RenderFillRect(sdl_resources->GetSDL_Renderer(), &block);
 
   // Update Screen
-  SDL_RenderPresent(sdl_resources->getSDL_Renderer());
+  SDL_RenderPresent(sdl_resources->GetSDL_Renderer());
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
   std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
-  SDL_SetWindowTitle(sdl_resources->getSDL_Window(), title.c_str());
+  SDL_SetWindowTitle(sdl_resources->GetSDL_Window(), title.c_str());
 }
 
 Renderer::SDL_Resources::SDL_Resources(
@@ -159,9 +159,9 @@ Renderer::SDL_Resources::~SDL_Resources() {
   SDL_Quit();
 }
 
-SDL_Window* Renderer::SDL_Resources::getSDL_Window() { return sdl_window; }
-SDL_Renderer* Renderer::SDL_Resources::getSDL_Renderer() { return sdl_renderer; }
-SDL_Texture* Renderer::SDL_Resources::getObstacleTexture() { return obstacle_texture; }
-SDL_Texture* Renderer::SDL_Resources::getSlowdownTexture() { return slowdowns_texture; }
-SDL_Texture* Renderer::SDL_Resources::getSpeedupTexture() { return speedups_texture; }
-SDL_Texture* Renderer::SDL_Resources::getFoodTexture() { return food_texture; }
+SDL_Window* Renderer::SDL_Resources::GetSDL_Window() { return sdl_window; }
+SDL_Renderer* Renderer::SDL_Resources::GetSDL_Renderer() { return sdl_renderer; }
+SDL_Texture* Renderer::SDL_Resources::GetObstacleTexture() { return obstacle_texture; }
+SDL_Texture* Renderer::SDL_Resources::GetSlowdownTexture() { return slowdowns_texture; }
+SDL_Texture* Renderer::SDL_Resources::GetSpeedupTexture() { return speedups_texture; }
+SDL_Texture* Renderer::SDL_Resources::GetFoodTexture() { return food_texture; }

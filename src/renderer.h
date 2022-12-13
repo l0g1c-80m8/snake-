@@ -42,12 +42,12 @@ class Renderer {
           std::size_t grid_height
           );
       ~SDL_Resources();
-      SDL_Window* getSDL_Window();
-      SDL_Renderer* getSDL_Renderer();
-      SDL_Texture *getObstacleTexture();
-      SDL_Texture *getSlowdownTexture();
-      SDL_Texture *getSpeedupTexture();
-      SDL_Texture *getFoodTexture();
+      SDL_Window* GetSDL_Window();
+      SDL_Renderer* GetSDL_Renderer();
+      SDL_Texture *GetObstacleTexture();
+      SDL_Texture *GetSlowdownTexture();
+      SDL_Texture *GetSpeedupTexture();
+      SDL_Texture *GetFoodTexture();
   };
 
   std::unique_ptr<SDL_Resources> sdl_resources;
