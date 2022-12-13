@@ -1,4 +1,5 @@
 #include <iostream>
+#include "config.h"
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
@@ -11,12 +12,13 @@ int main() {
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
 
+  auto config = Config::Instance();
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
   Game game(kGridWidth, kGridHeight);
   game.Run(controller, renderer, kMsPerFrame);
-  std::cout << "Game has terminated successfully!\n";
-  std::cout << "Score: " << game.GetScore() << "\n";
-  std::cout << "Size: " << game.GetSize() << "\n";
+  std::cout << "Game has terminated successfully!" << std::endl;
+  std::cout << "Score: " << game.GetScore() << std::endl;
+  std::cout << "Size: " << game.GetSize() << std::endl;
   return 0;
 }
