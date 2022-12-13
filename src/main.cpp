@@ -1,5 +1,4 @@
 #include <iostream>
-#include "config.h"
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
