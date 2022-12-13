@@ -30,7 +30,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     Controller::HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food_points);
+    renderer.Render(snake, obstacles, slowdowns, speedups, food_points);
 
     frame_end = SDL_GetTicks();
 
@@ -91,13 +91,13 @@ void Game::Update() {
     // Grow snake and increase speed.
     snake -> GrowBody();
     snake -> speed += 0.02;
-  } else if (obstacles.find(SDL_Point{new_x, new_y}) != food_points.end()) {
+  } else if (obstacles.find(SDL_Point{new_x, new_y}) != obstacles.end()) {
     PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giObstacle);
     // terminate game
-  } else if (slowdowns.find(SDL_Point{new_x, new_y}) != food_points.end()) {
+  } else if (slowdowns.find(SDL_Point{new_x, new_y}) != slowdowns.end()) {
     PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giSlowdown);
     snake -> speed -= 0.02;
-  } else if (speedups.find(SDL_Point{new_x, new_y}) != food_points.end()) {
+  } else if (speedups.find(SDL_Point{new_x, new_y}) != speedups.end()) {
     PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giSpeedup);
     snake -> speed += 0.02;
   }
