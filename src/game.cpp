@@ -1,5 +1,6 @@
 #include "game.h"
 #include "SDL.h"
+#include <iostream>
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     :
@@ -120,9 +121,9 @@ SDL_Point Game::GenerateGridPoint() {
     y = random_h(engine);
     // Check that the location is not occupied by a grid item before placing a new item.
     if (!snake -> SnakeCell(x, y)
-    && obstacles.find(SDL_Point{x, y}) == food_points.end()
-    && slowdowns.find(SDL_Point{x, y}) == food_points.end()
-    && speedups.find(SDL_Point{x, y}) == food_points.end()
+    && obstacles.find(SDL_Point{x, y}) == obstacles.end()
+    && slowdowns.find(SDL_Point{x, y}) == slowdowns.end()
+    && speedups.find(SDL_Point{x, y}) == speedups.end()
     && food_points.find(SDL_Point{x, y}) == food_points.end()
     )
       return SDL_Point {x, y};
