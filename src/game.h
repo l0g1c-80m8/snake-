@@ -18,6 +18,9 @@ class Game {
  private:
   std::shared_ptr<Snake> snake;
   SDL_Point food;
+  std::vector<SDL_Point> obstacles;
+  std::vector<SDL_Point> slowdowns;
+  std::vector<SDL_Point> speedups;
 
   std::random_device dev;
   std::mt19937 engine;
