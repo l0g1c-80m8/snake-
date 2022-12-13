@@ -6,8 +6,12 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
+  config = Config::Instance();
   snake = Snake::Instance(static_cast<int>(grid_width), static_cast<int>(grid_height));
-  PlaceFood();
+  obstacles = GenerateGridPoints(config -> getObstacles());
+  slowdowns = GenerateGridPoints(config -> getSlowdowns());
+  speedups = GenerateGridPoints(config -> getSpeedups());
+  food_points = GenerateGridPoints(config -> getFoodPoints());
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -25,7 +29,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     Controller::HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, food_points);
 
     frame_end = SDL_GetTicks();
 
@@ -50,18 +54,18 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::PlaceFood() {
-  int x, y;
-  while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
-    // Check that the location is not occupied by a snake item before placing
-    // food.
-    if (!snake -> SnakeCell(x, y)) {
-      food.x = x;
-      food.y = y;
-      return;
-    }
+void Game::PlaceGridItem(SDL_Point gridPoint, Game::GridItemType itemType) {
+  switch (itemType) {
+    case Game::GridItemType::giObstacle:
+      break;
+    case Game::GridItemType::giSlowdown:
+      break;
+    case Game::GridItemType::giSpeedup:
+      break;
+    case Game::GridItemType::giFood:
+      food_points.erase(gridPoint);
+      food_points.insert(GenerateGridPoint());
+      break;
   }
 }
 
@@ -74,9 +78,9 @@ void Game::Update() {
   int new_y = static_cast<int>(snake -> head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
+  if (food_points.find(SDL_Point{new_x, new_y}) != food_points.end()) {
     score++;
-    PlaceFood();
+    PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giFood);
     // Grow snake and increase speed.
     snake -> GrowBody();
     snake -> speed += 0.02;
@@ -85,3 +89,34 @@ void Game::Update() {
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake -> size; }
+
+std::set<SDL_Point> Game::GenerateGridPoints(int num) {
+  std::set<SDL_Point> pts{};
+  while (pts.size() < num) {
+    int x, y;
+    x = random_w(engine);
+    y = random_h(engine);
+    // Check that the location is not occupied by a snake item before placing food.
+    if (!snake -> SnakeCell(x, y))
+      pts.insert(SDL_Point{x, y});
+  }
+  return pts;
+}
+
+SDL_Point Game::GenerateGridPoint() {
+  while (true) {
+    int x, y;
+    x = random_w(engine);
+    y = random_h(engine);
+    // Check that the location is not occupied by a snake item before placing food.
+    if (!snake -> SnakeCell(x, y))
+      return SDL_Point {x, y};
+  }
+}
+
+bool operator<(const SDL_Point &pt1, const SDL_Point &pt2)
+{
+  if (pt1.x != pt2.x) return pt1.x < pt2.x;
+  if (pt1.y != pt2.y) return pt1.y < pt2.y;
+  return false;
+}
