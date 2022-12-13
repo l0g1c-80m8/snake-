@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "resources.h"
 #include <iostream>
 #include <string>
 
@@ -33,25 +34,25 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 
   // Create surfaces and textures for assets
-  obstacle_surface.reset(SDL_LoadBMP("../assets/obstacle.bmp"));
+  obstacle_surface.reset(SDL_LoadBMP(obstacle_asset));
   obstacle_texture = SDL_CreateTextureFromSurface(sdl_renderer, obstacle_surface.get());
   if (nullptr == obstacle_surface || nullptr == obstacle_texture) {
     std::cerr << "Obstacle item could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
-  speedups_surface.reset(SDL_LoadBMP("../assets/speedup.bmp"));
+  speedups_surface.reset(SDL_LoadBMP(speedup_asset));
   speedups_texture = SDL_CreateTextureFromSurface(sdl_renderer, speedups_surface.get());
   if (nullptr == speedups_surface || nullptr == speedups_texture) {
     std::cerr << "Speedup item could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
-  slowdowns_surface.reset(SDL_LoadBMP("../assets/slowdown.bmp"));
+  slowdowns_surface.reset(SDL_LoadBMP(slowdown_asset));
   slowdowns_texture = SDL_CreateTextureFromSurface(sdl_renderer, slowdowns_surface.get());
   if (nullptr == slowdowns_surface || nullptr == slowdowns_texture) {
     std::cerr << "SLowdown item could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
-  food_surface.reset(SDL_LoadBMP("../assets/food.bmp"));
+  food_surface.reset(SDL_LoadBMP(food_asset));
   food_texture = SDL_CreateTextureFromSurface(sdl_renderer, food_surface.get());
   if (nullptr == food_surface || nullptr == food_texture) {
     std::cerr << "Food item could not be created.\n";
