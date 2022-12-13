@@ -23,6 +23,14 @@ class Renderer {
  private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
+  SDL_Surface *obstacle_surface;
+  SDL_Texture *obstacle_texture;
+  SDL_Surface *speedups_surface;
+  SDL_Texture *speedups_texture;
+  SDL_Surface *slowdowns_surface;
+  SDL_Texture *slowdowns_texture;
+  SDL_Surface *food_surface;
+  SDL_Texture *food_texture;
 
   const std::size_t screen_width;
   const std::size_t screen_height;

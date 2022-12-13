@@ -31,6 +31,15 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+  obstacle_surface = SDL_LoadBMP("../assets/obstacle.bmp");
+  obstacle_texture = SDL_CreateTextureFromSurface(sdl_renderer, obstacle_surface);
+  speedups_surface = SDL_LoadBMP("../assets/speedup.bmp");
+  speedups_texture = SDL_CreateTextureFromSurface(sdl_renderer, speedups_surface);
+  slowdowns_surface = SDL_LoadBMP("../assets/slowdown.bmp");
+  slowdowns_texture = SDL_CreateTextureFromSurface(sdl_renderer, slowdowns_surface);
+  food_surface = SDL_LoadBMP("../assets/food.bmp");
+  food_texture = SDL_CreateTextureFromSurface(sdl_renderer, food_surface);
 }
 
 Renderer::~Renderer() {
@@ -58,7 +67,7 @@ void Renderer::Render(
   for (SDL_Point const &point : obstacles) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+    SDL_RenderCopy(sdl_renderer, obstacle_texture, nullptr, &block);
   }
 
   // Render slowdowns
@@ -66,7 +75,7 @@ void Renderer::Render(
   for (SDL_Point const &point : slowdowns) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+    SDL_RenderCopy(sdl_renderer, slowdowns_texture, nullptr, &block);
   }
 
   // Render speedups
@@ -74,7 +83,7 @@ void Renderer::Render(
   for (SDL_Point const &point : speedups) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+    SDL_RenderCopy(sdl_renderer, speedups_texture, nullptr, &block);
   }
 
   // Render food
@@ -82,7 +91,7 @@ void Renderer::Render(
   for (SDL_Point const &point : food_points) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+    SDL_RenderCopy(sdl_renderer, food_texture, nullptr, &block);
   }
 
   // Render snake's body
