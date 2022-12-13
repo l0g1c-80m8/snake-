@@ -92,8 +92,7 @@ void Game::Update() {
     snake -> GrowBody();
     snake -> speed += 0.02;
   } else if (obstacles.find(SDL_Point{new_x, new_y}) != obstacles.end()) {
-    PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giObstacle);
-    // terminate game
+    snake -> alive = false;
   } else if (slowdowns.find(SDL_Point{new_x, new_y}) != slowdowns.end()) {
     PlaceGridItem(SDL_Point{new_x, new_y}, Game::GridItemType::giSlowdown);
     snake -> speed -= 0.02;
