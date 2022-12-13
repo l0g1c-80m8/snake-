@@ -6,6 +6,19 @@ The code for this repo was inspired by [this](https://codereview.stackexchange.c
 
 [Watch the video](https://youtu.be/CQpWfHMSWvs)
 
+## Game Rules
+1. Collecting the apples increases the score and speeds up the snake.
+2. Collecting lightning speeds up the snake.
+3. Collecting the yellow slow/caution diamond will slow down the snake.
+4. Collecting poision bottle or colliding into the body will lead to the game ending.
+
+## Changing the Game Config
+Change the numbers in the game-config.txt file to change the game config.
+1. First line contains config for the number of poison bottles on the grid.
+2. Second line contains config for the number of yellow slowdown/caution diamonds on the grid.
+3. Third line contains config for the number of lightning speedups on the grid.
+4. Finally, the last line contains config for the number of apples on the grid.
+
 ## Dependencies for Running Locally
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
@@ -32,3 +45,6 @@ The code for this repo was inspired by [this](https://codereview.stackexchange.c
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
+
+## Project Specifications
+
