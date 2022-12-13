@@ -21,7 +21,7 @@ private:
     int _speedups;
 
     static const std::string config_file_name;
-    static std::shared_ptr<Config> _instance;
+    inline static std::shared_ptr<Config> _instance;
 
     static std::tuple<int, int, int> ReadConfig();
 //    void WriteConfig();
