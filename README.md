@@ -2,7 +2,7 @@
 
 The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
 
-![snake game demo run](snake_game.gif)
+![snake game demo run](snake_game.png)
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
