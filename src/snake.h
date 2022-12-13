@@ -11,8 +11,8 @@ class Snake {
   Snake(int grid_width, int grid_height)
       : grid_width(grid_width),
         grid_height(grid_height),
-        head_x(grid_width / 2),
-        head_y(grid_height / 2) {}
+        head_x(static_cast<float>(grid_width) / 2),
+        head_y(static_cast<float>(grid_height) / 2) {}
 
   void Update();
 
