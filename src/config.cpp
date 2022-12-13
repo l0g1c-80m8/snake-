@@ -48,6 +48,6 @@ std::tuple<int, int, int> Config::ReadConfig() {
     return {l1, l2, l3};
 }
 
-int Config::getObstacles() const { return obstacles; }
-int Config::getSlowdowns() const { return slowdowns; }
-int Config::getSpeedups() const { return speedups; }
+int Config::getObstacles() const { return _obstacles; }
+int Config::getSlowdowns() const { return _slowdowns; }
+int Config::getSpeedups() const { return _speedups; }
