@@ -1,6 +1,7 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+#include <memory>
 #include <vector>
 #include "SDL.h"
 

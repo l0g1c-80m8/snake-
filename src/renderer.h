@@ -1,6 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include <memory>
 #include <vector>
 #include <set>
 #include "SDL.h"

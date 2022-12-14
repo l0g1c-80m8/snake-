@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <memory>
 #include <random>
 #include <set>
 #include "SDL.h"

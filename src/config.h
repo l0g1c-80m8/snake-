@@ -7,6 +7,7 @@
 
 #include "string"
 #include "tuple"
+#include <memory>
 
 class Config {
 public:
