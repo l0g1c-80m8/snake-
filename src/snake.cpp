@@ -69,12 +69,11 @@ bool Snake::SnakeCell(int x, int y) {
   if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) {
     return true;
   }
-  return std::any_of(
-          body.begin(),
-          body.end(),
-          [x, y](auto const &item){
-              return (x == item.x && y == item.y);
-          });
+  for (auto & item : body) {
+    if (x == item.x && y == item.y)
+      return true;
+  }
+  return false;
 }
 
 std::shared_ptr<Snake> Snake::Instance(int grid_width, int grid_height) {
