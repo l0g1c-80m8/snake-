@@ -118,7 +118,6 @@ std::set<SDL_Point> Game::GenerateGridPoints(int num) {
     for (int i = 0; i < num - pts.size(); i++) {
       std::promise<SDL_Point> promise;
       future_points.push_back(promise.get_future());
-      pts.insert(GenerateGridPoint());
       thread_pool.emplace_back([this](std::promise<SDL_Point> promise) {
           promise.set_value(GenerateGridPoint());
       }, std::move(promise));
